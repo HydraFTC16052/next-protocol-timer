@@ -1,45 +1,272 @@
-<p><!DOCTYPE html> <html lang=&quot;pt-br&quot;> <head>  <meta charset=&quot;UTF-8&quot;>  <meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>  <title>FTC Timer - Hydra Legacy</title>  <style>  /* Estilos Base / Dark Mode FTC */  body {   margin: 0;   background-color: #1a1a1a;   color: #ffffff;   font-family: 'Courier New', Courier, monospace;   display: flex;   flex-direction: column;   align-items: center;   justify-content: center;   min-height: 100vh;   overflow: hidden;   }</p>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTC Timer - Hydra Legacy</title>
+    <style>
+        /* Estilos Base / Dark Mode FTC */
+        body { 
+            margin: 0; 
+            background-color: #1a1a1a; 
+            color: #ffffff; 
+            font-family: 'Courier New', Courier, monospace; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
 
-<p> /* Container Principal */  #timer-container {  text-align: center;  background-color: #2b2b2b;  padding: 30px 20px;  border-radius: 15px;  box-shadow: 0px 10px 30px rgba(0,0,0,0.5);  width: 90vw;  max-width: 800px;  }</p>
+        /* Container Principal */
+        #timer-container {
+            text-align: center;
+            background-color: #2b2b2b;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+            width: 90vw;
+            max-width: 800px;
+        }
 
-<p> /* Fase do Jogo (Ajustado para Celular) */  #phase-display {   font-size: 22px; /* Tamanho melhor para mobile */  text-transform: uppercase;   letter-spacing: 2px;   color: #cccccc;   min-height: 60px; /* Altura m&iacute;nima para permitir duas linhas sem quebrar o layout */  display: flex;  align-items: center;  justify-content: center;  margin-bottom: 10px;  text-align: center;  }</p>
+        /* O Relógio */
+        #timer-display { 
+            font-size: 20vw; 
+            font-weight: bold; 
+            line-height: 1; 
+            margin: 20px 0; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            transition: color 0.3s ease;
+        }
+        
+        @media (min-width: 1000px) {
+            #timer-display { font-size: 250px; }
+        }
 
-<p> /* O Rel&oacute;gio */  #timer-display {   font-size: 25vw; /* Fica enorme no celular */  font-weight: bold;   line-height: 1;   margin: 10px 0 20px 0;   text-shadow: 0 0 10px rgba(255,255,255,0.2);  transition: color 0.3s ease;  }    @media (min-width: 768px) {  #timer-display { font-size: 200px; }  #phase-display { font-size: 30px; letter-spacing: 3px; min-height: 40px; }  }</p>
+        /* Fase do Jogo */
+        #phase-display { 
+            font-size: 30px; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            color: #cccccc; 
+            height: 40px;
+        }
 
-<p> /* Cores das Fases */  .idle { color: #ffffff; }  .auto { color: #FFD700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5) !important; }  .transition { color: #00BFFF; text-shadow: 0 0 20px rgba(0, 191, 255, 0.5) !important; }  .teleop { color: #32CD32; text-shadow: 0 0 20px rgba(50, 205, 50, 0.5) !important; }  .endgame { color: #FF4500; text-shadow: 0 0 20px rgba(255, 69, 0, 0.5) !important; }</p>
+        /* Cores das Fases */
+        .idle { color: #ffffff; }
+        .auto { color: #FFD700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5) !important; }
+        .transition { color: #00BFFF; text-shadow: 0 0 20px rgba(0, 191, 255, 0.5) !important; }
+        .teleop { color: #32CD32; text-shadow: 0 0 20px rgba(50, 205, 50, 0.5) !important; }
+        .endgame { color: #FF4500; text-shadow: 0 0 20px rgba(255, 69, 0, 0.5) !important; }
 
-<p> /* Controles */  .controls {   display: flex;   flex-wrap: wrap;  gap: 10px;   justify-content: center;  margin-top: 20px;  }</p>
+        /* Controles */
+        .controls { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center;
+            margin-top: 30px;
+        }
 
-<p> button {   font-family: inherit;  font-size: 18px;   padding: 12px 20px;   cursor: pointer;   border: none;   border-radius: 8px;   font-weight: bold;   text-transform: uppercase;   transition: opacity 0.2s, transform 0.1s;  flex: 1 1 auto; /* Os bot&otilde;es se ajustam melhor em telas pequenas */  min-width: 100px;  }    button:active { transform: scale(0.95); }  button:hover { opacity: 0.8; }</p>
+        button { 
+            font-family: inherit;
+            font-size: 20px; 
+            padding: 15px 30px; 
+            cursor: pointer; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        
+        button:active { transform: scale(0.95); }
+        button:hover { opacity: 0.8; }
 
-<p> #btn-start { background: #4CAF50; color: white; }  #btn-pause { background: #f0ad4e; color: white; }  #btn-reset { background: #d9534f; color: white; }  </style> </head> <body></p>
+        #btn-start { background: #4CAF50; color: white; }
+        #btn-pause { background: #f0ad4e; color: white; }
+        #btn-reset { background: #d9534f; color: white; }
+    </style>
+</head>
+<body>
 
-<p> <div id=&quot;timer-container&quot;>  <div id=&quot;phase-display&quot;>Match Has Not Started</div>  <div id=&quot;timer-display&quot; class=&quot;idle&quot;>2:00</div>    <div class=&quot;controls&quot;>  <button id=&quot;btn-start&quot; onclick=&quot;startTimer()&quot;>Iniciar</button>  <button id=&quot;btn-pause&quot; onclick=&quot;pauseTimer()&quot;>Pausar</button>  <button id=&quot;btn-reset&quot; onclick=&quot;resetTimer()&quot;>Resetar</button>  </div>  </div></p>
+    <div id="timer-container">
+        <div id="phase-display">Match Has Not Started</div>
+        <div id="timer-display" class="idle">2:00</div>
+        
+        <div class="controls">
+            <button id="btn-start" onclick="startTimer()">Iniciar</button>
+            <button id="btn-pause" onclick="pauseTimer()">Pausar</button>
+            <button id="btn-reset" onclick="resetTimer()">Resetar</button>
+        </div>
+    </div>
 
-<p> <script>  // Vari&aacute;veis de Tempo (em segundos)  const MATCH_DURATION = 120; // 2 minutos  const AUTO_END = 90; // 1 minuto e 30 seg (Fim do Auto)  const END_GAME = 30; // 30 segundos finais  const TRANSITION_DURATION = 6; // Segundos de pausa entre Auto e Teleop</p>
+    <script>
+        // Variáveis de Tempo (em segundos)
+        const MATCH_DURATION = 120; // 2 minutos
+        const AUTO_END = 90;        // 1 minuto e 30 seg (Fim do Auto)
+        const END_GAME = 30;        // 30 segundos finais
+        const TRANSITION_DURATION = 6; // Segundos de pausa entre Auto e Teleop
 
-<p> let timeMain = MATCH_DURATION;  let timeTrans = TRANSITION_DURATION;    // Fases: IDLE, AUTO, TRANSITION, TELEOP, ENDGAME, FINISHED  let state = 'IDLE';   let interval = null;  let audioCtx = null;</p>
+        let timeMain = MATCH_DURATION;
+        let timeTrans = TRANSITION_DURATION;
+        
+        // Fases: IDLE, AUTO, TRANSITION, TELEOP, ENDGAME, FINISHED
+        let state = 'IDLE'; 
+        let interval = null;
+        let audioCtx = null;
 
-<p> // Elementos DOM  const displayTimer = document.getElementById('timer-display');  const displayPhase = document.getElementById('phase-display');</p>
+        // Elementos DOM
+        const displayTimer = document.getElementById('timer-display');
+        const displayPhase = document.getElementById('phase-display');
 
-<p> // Formatar tempo MM:SS  function formatTime(seconds) {  let m = Math.floor(seconds / 60);  let s = seconds % 60;  return m + &quot;:&quot; + (s < 10 ? &quot;0&quot; + s : s);  }</p>
+        // Formatar tempo MM:SS
+        function formatTime(seconds) {
+            let m = Math.floor(seconds / 60);
+            let s = seconds % 60;
+            return m + ":" + (s < 10 ? "0" + s : s);
+        }
 
-<p> // Atualizar Tela  function updateUI() {  if (state === 'IDLE') {  displayTimer.innerText = formatTime(MATCH_DURATION);  displayTimer.className = &quot;idle&quot;;  displayPhase.innerText = &quot;Match Has Not Started&quot;;  } else if (state === 'AUTO') {  displayTimer.innerText = formatTime(timeMain);  displayTimer.className = &quot;auto&quot;;  displayPhase.innerText = &quot;Autonomous Mode Running&quot;;  } else if (state === 'TRANSITION') {  displayTimer.innerText = &quot;0:0&quot; + timeTrans;   displayTimer.className = &quot;transition&quot;;  displayPhase.innerText = &quot;Drivers Pick Up Controllers&quot;;  } else if (state === 'TELEOP') {  displayTimer.innerText = formatTime(timeMain);  displayTimer.className = &quot;teleop&quot;;  displayPhase.innerText = &quot;Driver-Controlled Mode&quot;;  } else if (state === 'ENDGAME') {  displayTimer.innerText = formatTime(timeMain);  displayTimer.className = &quot;endgame&quot;;  displayPhase.innerText = &quot;End Game Period&quot;;  } else if (state === 'FINISHED') {  displayTimer.innerText = &quot;0:00&quot;;  displayTimer.className = &quot;idle&quot;;  displayPhase.innerText = &quot;Match Complete&quot;;  }  }</p>
+        // Atualizar Tela
+        function updateUI() {
+            if (state === 'IDLE') {
+                displayTimer.innerText = formatTime(MATCH_DURATION);
+                displayTimer.className = "idle";
+                displayPhase.innerText = "Match Has Not Started";
+            } else if (state === 'AUTO') {
+                displayTimer.innerText = formatTime(timeMain);
+                displayTimer.className = "auto";
+                displayPhase.innerText = "Autonomous Mode Running";
+            } else if (state === 'TRANSITION') {
+                displayTimer.innerText = "0:0" + timeTrans; 
+                displayTimer.className = "transition";
+                displayPhase.innerText = "Drivers Pick Up Controllers";
+            } else if (state === 'TELEOP') {
+                displayTimer.innerText = formatTime(timeMain);
+                displayTimer.className = "teleop";
+                displayPhase.innerText = "Driver-Controlled Mode";
+            } else if (state === 'ENDGAME') {
+                displayTimer.innerText = formatTime(timeMain);
+                displayTimer.className = "endgame";
+                displayPhase.innerText = "End Game Period";
+            } else if (state === 'FINISHED') {
+                displayTimer.innerText = "0:00";
+                displayTimer.className = "idle";
+                displayPhase.innerText = "Match Complete";
+            }
+        }
 
-<p> // Sintetizador de Bipes (&Aacute;udio Nativo)  function playTone(freq, type, duration) {  try {  if (!audioCtx) {  audioCtx = new (window.AudioContext || window.webkitAudioContext)();  }  const osc = audioCtx.createOscillator();  const gain = audioCtx.createGain();  osc.type = type;  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);    // Suaviza o som para n&atilde;o estourar  gain.gain.setValueAtTime(0.1, audioCtx.currentTime);  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);</p>
+        // Sintetizador de Bipes (Áudio Nativo)
+        function playTone(freq, type, duration) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                
+                // Suaviza o som para não estourar
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
 
-<p> osc.connect(gain);  gain.connect(audioCtx.destination);    osc.start();  osc.stop(audioCtx.currentTime + duration);  } catch (e) { console.log(&quot;&Aacute;udio bloqueado pelo navegador at&eacute; o usu&aacute;rio interagir.&quot;); }  }</p>
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) { console.log("Áudio bloqueado pelo navegador até o usuário interagir."); }
+        }
 
-<p> function beepCountdown() { playTone(440, 'square', 0.2); } // Bipe agudo curto (3,2,1)  function beepGo() { playTone(880, 'square', 0.6); } // Bipe mais agudo (GO)  function beepEnd() { playTone(300, 'sawtooth', 1.5); } // Sirene grave (Fim de partida)</p>
+        function beepCountdown() { playTone(440, 'square', 0.2); } // Bipe agudo curto (3,2,1)
+        function beepGo() { playTone(880, 'square', 0.6); }        // Bipe mais agudo (GO)
+        function beepEnd() { playTone(300, 'sawtooth', 1.5); }     // Sirene grave (Fim de partida)
 
-<p> // Loop principal rodando a cada 1 segundo  function tick() {  if (state === 'AUTO') {  timeMain--;    if (timeMain === AUTO_END) {  // Entra na Transi&ccedil;&atilde;o  state = 'TRANSITION';  timeTrans = TRANSITION_DURATION;  beepGo();   }  }   else if (state === 'TRANSITION') {  timeTrans--;    if (timeTrans <= 3 &amp;&amp; timeTrans > 0) {  beepCountdown(); // Bipa no 3, 2, 1 dos controles  }    if (timeTrans <= 0) {  // Volta pro TeleOp a partir de 1:30  state = 'TELEOP';  beepGo();  }  }   else if (state === 'TELEOP') {  timeMain--;    if (timeMain === END_GAME) {  state = 'ENDGAME';  playTone(600, 'triangle', 1.0); // Som de End Game  }  }   else if (state === 'ENDGAME') {  timeMain--;    if (timeMain <= 3 &amp;&amp; timeMain > 0) {  beepCountdown(); // 3, 2, 1 final  }</p>
+        // Loop principal rodando a cada 1 segundo
+        function tick() {
+            if (state === 'AUTO') {
+                timeMain--;
+                
+                if (timeMain === AUTO_END) {
+                    // Entra na Transição
+                    state = 'TRANSITION';
+                    timeTrans = TRANSITION_DURATION;
+                    beepGo(); 
+                }
+            } 
+            else if (state === 'TRANSITION') {
+                timeTrans--;
+                
+                if (timeTrans <= 3 && timeTrans > 0) {
+                    beepCountdown(); // Bipa no 3, 2, 1 dos controles
+                }
+                
+                if (timeTrans <= 0) {
+                    // Volta pro TeleOp a partir de 1:30
+                    state = 'TELEOP';
+                    beepGo();
+                }
+            } 
+            else if (state === 'TELEOP') {
+                timeMain--;
+                
+                if (timeMain === END_GAME) {
+                    state = 'ENDGAME';
+                    playTone(600, 'triangle', 1.0); // Som de End Game
+                }
+            } 
+            else if (state === 'ENDGAME') {
+                timeMain--;
+                
+                if (timeMain <= 3 && timeMain > 0) {
+                    beepCountdown(); // 3, 2, 1 final
+                }
 
-<p> if (timeMain <= 0) {  state = 'FINISHED';  beepEnd();  clearInterval(interval);  interval = null;  }  }  updateUI();  }</p>
+                if (timeMain <= 0) {
+                    state = 'FINISHED';
+                    beepEnd();
+                    clearInterval(interval);
+                    interval = null;
+                }
+            }
+            updateUI();
+        }
 
-<p> // Fun&ccedil;&otilde;es dos Bot&otilde;es  function startTimer() {  // Inicializa &aacute;udio no primeiro clique do usu&aacute;rio  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();    if (state === 'IDLE' || state === 'FINISHED') {  resetTimer();  state = 'AUTO';  beepGo();  }    if (!interval &amp;&amp; state !== 'FINISHED') {  interval = setInterval(tick, 1000);  }  updateUI();  }</p>
+        // Funções dos Botões
+        function startTimer() {
+            // Inicializa áudio no primeiro clique do usuário
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            if (state === 'IDLE' || state === 'FINISHED') {
+                resetTimer();
+                state = 'AUTO';
+                beepGo();
+            }
+            
+            if (!interval && state !== 'FINISHED') {
+                interval = setInterval(tick, 1000);
+            }
+            updateUI();
+        }
 
-<p> function pauseTimer() {  if (interval) {  clearInterval(interval);  interval = null;  }  }</p>
+        function pauseTimer() {
+            if (interval) {
+                clearInterval(interval);
+                interval = null;
+            }
+        }
 
-<p> function resetTimer() {  pauseTimer();  timeMain = MATCH_DURATION;  timeTrans = TRANSITION_DURATION;  state = 'IDLE';  updateUI();  }</p>
+        function resetTimer() {
+            pauseTimer();
+            timeMain = MATCH_DURATION;
+            timeTrans = TRANSITION_DURATION;
+            state = 'IDLE';
+            updateUI();
+        }
 
-<p> // Inicia a interface  updateUI();  </script> </body> </html></p>
+        // Inicia a interface
+        updateUI();
+    </script>
+</body>
+</html>
