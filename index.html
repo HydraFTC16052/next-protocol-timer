@@ -15,7 +15,7 @@
             flex-direction: column; 
             align-items: center; 
             justify-content: center; 
-            height: 100vh; 
+            min-height: 100vh; 
             overflow: hidden; 
         }
 
@@ -23,34 +23,40 @@
         #timer-container {
             text-align: center;
             background-color: #2b2b2b;
-            padding: 40px;
+            padding: 30px 20px;
             border-radius: 15px;
             box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
             width: 90vw;
             max-width: 800px;
         }
 
+        /* Fase do Jogo (Ajustado para Celular) */
+        #phase-display { 
+            font-size: 22px; /* Tamanho melhor para mobile */
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: #cccccc; 
+            min-height: 60px; /* Altura mínima para permitir duas linhas sem quebrar o layout */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
         /* O Relógio */
         #timer-display { 
-            font-size: 20vw; 
+            font-size: 25vw; /* Fica enorme no celular */
             font-weight: bold; 
             line-height: 1; 
-            margin: 20px 0; 
+            margin: 10px 0 20px 0; 
             text-shadow: 0 0 10px rgba(255,255,255,0.2);
             transition: color 0.3s ease;
         }
         
-        @media (min-width: 1000px) {
-            #timer-display { font-size: 250px; }
-        }
-
-        /* Fase do Jogo */
-        #phase-display { 
-            font-size: 30px; 
-            text-transform: uppercase; 
-            letter-spacing: 3px; 
-            color: #cccccc; 
-            height: 40px;
+        @media (min-width: 768px) {
+            #timer-display { font-size: 200px; }
+            #phase-display { font-size: 30px; letter-spacing: 3px; min-height: 40px; }
         }
 
         /* Cores das Fases */
@@ -63,21 +69,24 @@
         /* Controles */
         .controls { 
             display: flex; 
-            gap: 15px; 
+            flex-wrap: wrap;
+            gap: 10px; 
             justify-content: center;
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         button { 
             font-family: inherit;
-            font-size: 20px; 
-            padding: 15px 30px; 
+            font-size: 18px; 
+            padding: 12px 20px; 
             cursor: pointer; 
             border: none; 
             border-radius: 8px; 
             font-weight: bold; 
             text-transform: uppercase; 
             transition: opacity 0.2s, transform 0.1s;
+            flex: 1 1 auto; /* Os botões se ajustam melhor em telas pequenas */
+            min-width: 100px;
         }
         
         button:active { transform: scale(0.95); }
